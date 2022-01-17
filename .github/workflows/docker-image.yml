@@ -19,7 +19,7 @@ jobs:
     - name: uploading12345
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
-        image: harshametla/docker_image
+        image: harshametla/new
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
