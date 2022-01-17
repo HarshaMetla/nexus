@@ -51,6 +51,8 @@ jobs:
           echo The result is $value
   job_4:
       name: Print Happy
+      needs: job_3
+      
       runs-on: macOS-latest
       steps:
         - name: hollo
