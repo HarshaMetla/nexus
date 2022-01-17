@@ -1,44 +1,51 @@
-name: Go
+name: Share data between jobs
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  schedule:
-#   nightly build
-    - cron: "26 20 * * *"
+on: [push]
 
 jobs:
-
-  build:
-    name: Build
+  job_1:
+    name: Add 3 and 7
     runs-on: ubuntu-latest
     steps:
+      - shell: bash
+        run: |
+          expr 3 + 7 > math-homework.txt
+      - name: Upload math result for job 1
+        uses: actions/upload-artifact@v2
+        with:
+          name: homework
+          path: math-homework.txt
 
-    - name: Set up Go 1.x
-      uses: actions/setup-go@v2
-      with:
-        go-version: ^1.16
-      id: go
+  job_2:
+    name: Multiply by 9
+    needs: job_1
+    runs-on: windows-latest
+    steps:
+      - name: Download math result for job 1
+        uses: actions/download-artifact@v2
+        with:
+          name: homework
+      - shell: bash
+        run: |
+          value=`cat math-homework.txt`
+          expr $value \* 9 > math-homework.txt
+      - name: Upload math result for job 2
+        uses: actions/upload-artifact@v2
+        with:
+          name: homework
+          path: math-homework.txt
 
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v2
-
-    - name: Build
-      run: go build -v .
-
-    - name: Test
-      run: go test -v .
-
-    - name: Nexus Repo Publish
-      uses: sonatype-nexus-community/nexus-repo-github-action@master
-      with:
-        serverUrl: https://pinginx.dannyrollo.com/nexus3/
-        username: ${{ secrets.nxrm_user }}
-        password: ${{ secrets.nxrm_password }}
-        format: raw
-        repository: raw-github-action-test
-        coordinates: directory=nexus-repo-github-action-test-rawrepodir
-        assets: filename=gh-action-test
-        filename: ./gh-action-test
+  job_3:
+    name: Display results
+    needs: job_2
+    runs-on: macOS-latest
+    steps:
+      - name: Download math result for job 2
+        uses: actions/download-artifact@v2
+        with:
+          name: homework
+      - name: Print the final result
+        shell: bash
+        run: |
+          value=`cat math-homework.txt`
+          echo The result is $value
