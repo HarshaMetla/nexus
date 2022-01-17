@@ -70,7 +70,7 @@ jobs:
      steps:
         - uses: actions/checkout@v2
         - name: Build the Docker image of mine
-          run: docker build . --file nmap_Dockerfile --tag my123:123
+          run: docker build . --file Dockerfile --tag my123:123
         - name: uploading12345
           uses: mr-smithers-excellent/docker-build-push@v5
           with:
