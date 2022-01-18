@@ -10,12 +10,9 @@
   
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sonar.organization>harshametla</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
-  <properties>
-  <sonar.organization>harshametla</sonar.organization>
-  <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-  </properties>
-  
   <modules>
   	<module>modules</module>
   	<module>documentation</module>
